@@ -1,10 +1,10 @@
 FROM grafana/loki:latest
 
-# Bring in the config
+# Copy a custom Loki configuration file
 COPY loki-config.yaml /etc/loki/loki-config.yaml
 
-# Expose defaults (Railway will still inject $PORT)
+# Expose necessary ports
 EXPOSE 3100 9096
 
-# Let ${PORT} in YAML expand
-CMD ["-config.file=/etc/loki/loki-config.yaml", "-config.expand-env=true"]
+# Set the command to run Loki with the specified configuration
+CMD ["-config.file=/etc/loki/loki-config.yaml"]
