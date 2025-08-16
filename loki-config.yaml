@@ -4,10 +4,8 @@ server:
   http_listen_port: ${PORT:-3100}
   grpc_listen_port: 9096
   log_level: info
-  grpc_server_max_concurrent_streams: 1000
 
 common:
-  # <-- match your Railway Volume mount
   path_prefix: /loki
   storage:
     filesystem:
@@ -27,7 +25,6 @@ query_range:
 
 limits_config:
   allow_structured_metadata: true
-  # retention_period: 168h  # (optional) keep 7 days
 
 schema_config:
   configs:
@@ -39,21 +36,7 @@ schema_config:
         prefix: index_
         period: 24h
 
-# Disable if you don't use alerts; otherwise it will try to set up ruler storage
-# Comment one of the two blocks below IN:
-
-# (A) Disable ruler entirely (simplest)
-# ruler: {}
-
-# (B) Use ruler and keep its files inside the same Volume
-ruler:
-  storage:
-    type: local
-    local:
-      directory: /loki/rules         # path within the mounted volume
-  rule_path: /loki/rules-temp         # temp dir used by ruler
-  alertmanager_url: http://localhost:9093
-  enable_api: true
+# IMPORTANT: ruler omitted/disabled, so no /loki/rules creation at startup
 
 frontend:
   encoding: protobuf
